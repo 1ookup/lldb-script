@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #coding:utf-8
-
+# 依赖 dslldb.py
 import lldb
 # import commands
 import optparse
@@ -29,7 +29,9 @@ def dump_image(img):
     cmd = 'section ' + img
     interpreter.HandleCommand(cmd, returnObject)
     output = returnObject.GetOutput();
-
+    pattern = r'\x1b\[\d+m';
+    output = re.sub(pattern, '', output);
+    # print(output.encode())
     for i in  re.findall(r"^\[(.*?)-(.*?)\] (.*?) (.*?)$", output, re.M):
         # print(i)
         image_name, section_name = i[3].split("`")
